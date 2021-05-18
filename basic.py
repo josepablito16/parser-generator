@@ -306,15 +306,18 @@ class Parser:
     def makeGroup(self):
         res = self.makeSymbol()
 
-        while (self.tokenActual != None and (self.tokenActual.tipo == TT_LBRACES or self.tokenActual.tipo == TT_LBRACKET)):
+        '''
+            Mientras no hayamos llegado al final y encuentre { o [
+        '''
+        while (self.tokenActual != TT_EOF and (self.tokenActual.tipo == TT_LBRACES or self.tokenActual.tipo == TT_LBRACKET)):
 
             if (self.tokenActual.tipo == TT_LBRACES):
                 self.avanzar()
 
                 expresion = self.expr()
-                print(f"en makeGroup expresion = {expresion}")
-                res = NodoBinario(expresion, TT_MUL,
-                                  TT_ALFA)
+
+                res = NodoBinario(expresion, Token(TT_MUL),
+                                  Token(TT_ALFA))
 
                 if (self.tokenActual.tipo != TT_RBRACES):
                     print("Error: se esperaba }")
@@ -324,9 +327,8 @@ class Parser:
                 self.avanzar()
 
                 expresion = self.expr()
-                print(f"en makeGroup expresion = {expresion}")
 
-                res = NodoBinario(expresion, TT_OR, TT_EPSILON)
+                res = NodoBinario(expresion, Token(TT_OR), Token(TT_EPSILON))
 
                 if (self.tokenActual.tipo != TT_RBRACKET):
                     print('Error: se esperaba ]')
@@ -335,14 +337,22 @@ class Parser:
 
     def term(self):
         res = self.makeGroup()
+
+        '''
+            Mientras no hayamos llegado al final y tengamos concatenacion
+        '''
+        while (self.tokenActual != TT_EOF and self.tokenActual == TT_CONCAT):
+            self.avanzar()
+            res = NodoBinario(res, Token(TT_CONCAT), self.makeGroup())
+
         return res
 
     def expr(self):
         res = self.term()
 
-        while self.tokenActual != None and self.tokenActual.tipo == TT_OR:
+        while self.tokenActual != TT_EOF and self.tokenActual.tipo == TT_OR:
             self.avanzar()
-            res = NodoBinario(res, TT_OR, self.expr())
+            res = NodoBinario(res, Token(TT_OR), self.expr())
 
         return res
 
@@ -359,9 +369,9 @@ class Parser:
 def getSubListaNodes(root):
     listaSubNodos = []
 
-    if(isinstance(root, NodoBinario) or isinstance(root, NodoUnitario)):
+    if(isinstance(root, NodoBinario)):
         for j in root.listaTokens:
-            if(isinstance(j, NodoBinario) or isinstance(j, NodoUnitario)):
+            if(isinstance(j, NodoBinario)):
                 listaSubNodos += getSubListaNodes(j)
             else:
                 listaSubNodos.append(j)
@@ -378,12 +388,10 @@ def getListNodes(root):
     listaNodos = []
     if isinstance(root, NodoBinario):
         for i in root.listaTokens:
-            if(isinstance(i, NodoBinario) or isinstance(i, NodoUnitario)):
+            if(isinstance(i, NodoBinario)):
                 listaNodos += getSubListaNodes(i)
             else:
                 listaNodos.append(i)
-    elif isinstance(root, NodoNumero):
-        listaNodos.append(root)
     else:
         pass
         # print(root)
@@ -406,6 +414,6 @@ def run(textoPlano):
 
     parser = Parser(tokens)
     ast = parser.parse()
-    print(f'\PARSER \n {ast}\n')
-    # return getListNodes(ast.nodo), ast.error
-    return "", ""
+
+    #print(f'\PARSER \n {getListNodes(ast)}\n')
+    return getListNodes(ast), None

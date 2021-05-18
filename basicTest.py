@@ -1,16 +1,22 @@
 import basic
 from character import *
 from tokenObj import *
-#test = ['2+5*3', '2+2+2+2+2', '(1+2)/(1+2)', '123 123 123 +', '1+', '1 + d']
+# test = ['2+5*3', '2+2+2+2+2', '(1+2)/(1+2)', '123 123 123 +', '1+', '1 + d']
 
 
 def getTest(texto):
     result, error = basic.run(texto)
+    resultList = []
+    for i in result:
+        if (i.tipo == 'INT'):
+            resultList.append(i.valor.elementos)
+        else:
+            resultList.append(i.tipo)
 
     if error:
         return str(error.asString())
     else:
-        return result
+        return resultList
 
 
 '''
@@ -51,8 +57,10 @@ lista = getTest([Character('L'),
                  '{', Character('L'), '|', Character('D'), '}'])
 '''
 
-lista = getTest(['{', Character('L'), '|', Character('D'), '}'])
-print(lista)
+# NUEVAS PRUEBAS PROYECTO 3
+assert getTest(['{', Character('L'), '|', Character('D'), '}']
+               ) == ['LPAREN', 'LPAREN', {'L'}, 'OR', {'D'}, 'RPAREN', 'MUL', 'ALFA', 'RPAREN']
+
 
 '''
 assert getTest('2+5*3') == '(2+(5*3))', "debería crear paréntesis"
