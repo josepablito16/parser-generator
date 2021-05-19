@@ -289,7 +289,8 @@ class Parser:
         return self.tokenActual
 
     def makeSymbol(self):
-        if (self.tokenActual.tipo == TT_LPAREN):
+        token = self.tokenActual
+        if (token.tipo == TT_LPAREN):
             self.avanzar()
             res = self.expr()
 
@@ -298,8 +299,7 @@ class Parser:
             self.avanzar()
             return res
 
-        elif (self.tokenActual.tipo == TT_INT):
-            token = self.tokenActual
+        elif (token.tipo == TT_INT):
             self.avanzar()
             return token
 
@@ -309,14 +309,12 @@ class Parser:
         '''
             Mientras no hayamos llegado al final y encuentre { o [
         '''
-        while (self.tokenActual != TT_EOF and (self.tokenActual.tipo == TT_LBRACES or self.tokenActual.tipo == TT_LBRACKET)):
+        while (self.tokenActual.tipo != TT_EOF and (self.tokenActual.tipo == TT_LBRACES or self.tokenActual.tipo == TT_LBRACKET)):
 
             if (self.tokenActual.tipo == TT_LBRACES):
                 self.avanzar()
 
-                expresion = self.expr()
-
-                res = NodoBinario(expresion, Token(TT_MUL),
+                res = NodoBinario(self.expr(), Token(TT_MUL),
                                   Token(TT_ALFA))
 
                 if (self.tokenActual.tipo != TT_RBRACES):
@@ -326,9 +324,7 @@ class Parser:
             elif(self.tokenActual.tipo == TT_LBRACKET):
                 self.avanzar()
 
-                expresion = self.expr()
-
-                res = NodoBinario(expresion, Token(TT_OR), Token(TT_EPSILON))
+                res = NodoBinario(self.expr(), Token(TT_OR), Token(TT_EPSILON))
 
                 if (self.tokenActual.tipo != TT_RBRACKET):
                     print('Error: se esperaba ]')
@@ -341,7 +337,7 @@ class Parser:
         '''
             Mientras no hayamos llegado al final y tengamos concatenacion
         '''
-        while (self.tokenActual != TT_EOF and self.tokenActual == TT_CONCAT):
+        while (self.tokenActual.tipo != TT_EOF and self.tokenActual.tipo == TT_CONCAT):
             self.avanzar()
             res = NodoBinario(res, Token(TT_CONCAT), self.makeGroup())
 
@@ -350,7 +346,7 @@ class Parser:
     def expr(self):
         res = self.term()
 
-        while self.tokenActual != TT_EOF and self.tokenActual.tipo == TT_OR:
+        while self.tokenActual.tipo != TT_EOF and self.tokenActual.tipo == TT_OR:
             self.avanzar()
             res = NodoBinario(res, Token(TT_OR), self.expr())
 
@@ -415,5 +411,5 @@ def run(textoPlano):
     parser = Parser(tokens)
     ast = parser.parse()
 
-    #print(f'\PARSER \n {getListNodes(ast)}\n')
+    print(f'\PARSER \n {ast}\n')
     return getListNodes(ast), None

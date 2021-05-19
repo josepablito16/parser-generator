@@ -58,9 +58,16 @@ lista = getTest([Character('L'),
 '''
 
 # NUEVAS PRUEBAS PROYECTO 3
+'''
 assert getTest(['{', Character('L'), '|', Character('D'), '}']
                ) == ['LPAREN', 'LPAREN', {'L'}, 'OR', {'D'}, 'RPAREN', 'MUL', 'ALFA', 'RPAREN']
 
+
+assert getTest([Character('L'), '{', Character('L'), '|', Character('D'), '}']) == ['LPAREN', {
+    'L'}, 'CONCAT', 'LPAREN', 'LPAREN', {'L'}, 'OR', {'D'}, 'RPAREN', 'MUL', 'ALFA', 'RPAREN', 'RPAREN']
+'''
+print(getTest([Character('"'), Character('S'),
+               '{', Character('S'), '}', Character('"')]))
 
 '''
 assert getTest('2+5*3') == '(2+(5*3))', "debería crear paréntesis"
