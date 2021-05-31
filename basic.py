@@ -45,10 +45,10 @@ diccionario = {
 openTokens = ['(', '{', '[']
 closeTokens = [')', '}', ']']
 
-
 #######################################
 # LEXER
 #######################################
+
 
 class Lexer:
     '''
@@ -326,16 +326,109 @@ class NodoBinario:
             tipo = None
 
         if (tipo in [TT_LPAREN, None]):
-            return f"({self.nodoIzquierdo} {self.tokenOperacion} {self.nodoDerecho})"
+            return f"({self.nodoIzquierdo}{diccionario[self.tokenOperacion.tipo]}{self.nodoDerecho})"
 
         elif (tipo == TT_LBRACKET):
             # return f"[{self.nodoIzquierdo}{diccionario[self.tokenOperacion.tipo]}{self.nodoDerecho}]"
-            return f"(({self.nodoIzquierdo} {self.tokenOperacion} {self.nodoDerecho})|E)"
+            return f"(({self.nodoIzquierdo}{diccionario[self.tokenOperacion.tipo]}{self.nodoDerecho})|E)"
 
         elif (tipo == TT_LBRACES):
             # return f"{chr(123)}{self.nodoIzquierdo}{diccionario[self.tokenOperacion.tipo]}{self.nodoDerecho}{chr(125)}"
-            return f"(({self.nodoIzquierdo} {self.tokenOperacion} {self.nodoDerecho})*A)"
+            return f"(({self.nodoIzquierdo}{diccionario[self.tokenOperacion.tipo]}{self.nodoDerecho})*A)"
 
+
+class NodoUnitario:
+    '''
+    Nodo que contiene <nodo izquierdo> <operador> <nodo derecho>
+    '''
+
+    def __init__(self, nodo, agrupacion=None):
+        self.nodo = nodo
+        self.agrupacion = agrupacion
+        self.listaTokens = []
+        self.crearAgrupacion()
+
+    def crearAgrupacion(self):
+        try:
+            tipo = self.agrupacion.tipo
+        except:
+            tipo = None
+
+        if (tipo in [TT_LPAREN, None]):
+            self.listaTokens = [
+                Token(TT_LPAREN), self.nodo, Token(TT_RPAREN)]
+
+        elif (tipo == TT_LBRACKET):
+            # OPCION
+            '''
+            self.listaTokens = [
+                Token(TT_LBRACKET), self.nodo, Token(TT_RBRACKET)]
+            '''
+            self.listaTokens = [Token(TT_LPAREN), self.nodo, Token(
+                TT_OR), Token(TT_EPSILON), Token(TT_RPAREN)]
+
+        elif (tipo == TT_LBRACES):
+            # 0 O MAS VECES
+            '''
+            self.listaTokens = [
+                Token(TT_LBRACES), self.nodo, Token(TT_RBRACES)]
+            '''
+            self.listaTokens = [Token(TT_LPAREN), self.nodo, Token(
+                TT_MUL), Token(TT_ALFA), Token(TT_RPAREN)]
+
+    def __repr__(self):
+        try:
+            tipo = self.agrupacion.tipo
+        except:
+            tipo = None
+
+        if (tipo in [TT_LPAREN, None]):
+            return f"({self.nodo.valor})"
+
+        elif (tipo == TT_LBRACKET):
+            return f"({self.nodo.valor}|E)"
+
+        elif (tipo == TT_LBRACES):
+            return f"({self.nodo.valor}*A)"
+
+#######################################
+# PARSER DE RESULTADOS
+#######################################
+
+
+class ParseResultados:
+    '''
+    Lleva el control de errores o avances del parser
+    '''
+
+    def __init__(self):
+        self.error = None
+        self.nodo = None
+
+    def registrar(self, res):
+        '''
+        Registra una operacion nueva del parser,
+        actualiza errores de ser necesario
+        '''
+        if isinstance(res, ParseResultados):
+            if res.error:
+                self.error = res.error
+            return res.nodo
+        return res
+
+    def success(self, nodo):
+        '''
+        Marca como exitoso una operacion del parser
+        '''
+        self.nodo = nodo
+        return self
+
+    def failure(self, error):
+        '''
+        Marca como fallida una operacion del parser
+        '''
+        self.error = error
+        return self
 
 #######################################
 # PARSER
@@ -433,7 +526,6 @@ class Parser:
         res = self.expr()
         return res
 
-
 #######################################
 # RUN
 #######################################
@@ -481,13 +573,11 @@ def run(textoPlano):
     # print(textoPlano)
     lexer = Lexer(textoPlano)
     tokens, error = lexer.crearTokens2()
-    print(f'\nTOKENS \n {tokens}\n')
-
+    #print(f'\nTOKENS \n {tokens}\n')
     if error:
         return None, error
 
     parser = Parser(tokens)
     ast = parser.parse()
-
-    print(f'\PARSER \n {ast}\n')
+    # print()
     return getListNodes(ast), None

@@ -74,8 +74,7 @@ assert getTest([Character('"'), Character('S'), '{', Character('S'), '}', Charac
 assert getTest([Character('"'), '[', Character('/'), ']', Character('S'), Character('"')]) == ['LPAREN', 'LPAREN', 'LPAREN',
                                                                                                {'"'}, 'CONCAT', 'LPAREN', {'/'}, 'OR', 'EPSILON', 'RPAREN', 'RPAREN', 'CONCAT', {'S'}, 'RPAREN', 'CONCAT', {'"'}, 'RPAREN']
 '''
-print(getTest([Character('C('), Character('D'), '{', Character('D'), '}', Character(')'), Character(
-    '..'), Character('C('), Character('D'), '{', Character('D'), '}', Character(')')]))
+print(getTest(['{', Character('L'), '|', Character('D'), '}']))
 '''
 
 print("TODO BIEN!")
