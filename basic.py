@@ -42,6 +42,9 @@ diccionario = {
     'CONCAT': '.'
 }
 
+openTokens = ['(', '{', '[']
+closeTokens = [')', '}', ']']
+
 
 #######################################
 # LEXER
@@ -157,6 +160,80 @@ class Lexer:
                 char = self.charActual
                 self.avanzar()
                 return [], IllegalCharError(f"'{char}'")
+
+        # al final agrega el token de final
+        tokens.append(Token(TT_EOF))
+        return tokens, None
+
+    def crearTokens2(self):
+        '''
+        Crea una lista de tokens
+        '''
+        tokens = []
+        if isinstance(self.textoPlano[0], Character):
+            tokens.append(Token(TT_INT, self.textoPlano[0]))
+        elif self.textoPlano[0] == '|':
+            tokens.append(Token(TT_OR))
+        elif self.textoPlano[0] == '(':
+            tokens.append(Token(TT_LPAREN))
+        elif self.textoPlano[0] == ')':
+            tokens.append(Token(TT_RPAREN))
+        elif self.textoPlano[0] == '[':
+            tokens.append(Token(TT_LBRACKET))
+        elif self.textoPlano[0] == ']':
+            tokens.append(Token(TT_RBRACKET))
+        elif self.textoPlano[0] == '{':
+            tokens.append(Token(TT_LBRACES))
+        elif self.textoPlano[0] == '}':
+            tokens.append(Token(TT_RBRACES))
+
+        # Mientras no haya llegado al final
+        for index in range(1, len(self.textoPlano)):
+
+            # caso 1
+            # char . char
+            if (isinstance(self.textoPlano[index-1], Character) and isinstance(self.textoPlano[index], Character)):
+                tokens.append(Token(TT_CONCAT))
+                tokens.append(Token(TT_INT, self.textoPlano[index]))
+
+            # caso 2
+            # char . open
+            elif (isinstance(self.textoPlano[index-1], Character) and self.textoPlano[index] in openTokens):
+                tokens.append(Token(TT_CONCAT))
+                if self.textoPlano[index] == '(':
+                    tokens.append(Token(TT_LPAREN))
+                elif self.textoPlano[index] == '[':
+                    tokens.append(Token(TT_LBRACKET))
+                elif self.textoPlano[index] == '{':
+                    tokens.append(Token(TT_LBRACES))
+
+            # caso 3
+            # close . char
+            elif (self.textoPlano[index-1] in closeTokens and isinstance(self.textoPlano[index], Character)):
+                tokens.append(Token(TT_CONCAT))
+                tokens.append(Token(TT_INT, self.textoPlano[index]))
+
+            else:
+                if isinstance(self.textoPlano[index], Character):
+                    tokens.append(Token(TT_INT, self.textoPlano[index]))
+                elif self.textoPlano[index] == '|':
+                    tokens.append(Token(TT_OR))
+                elif self.textoPlano[index] == '(':
+                    tokens.append(Token(TT_LPAREN))
+                elif self.textoPlano[index] == ')':
+                    tokens.append(Token(TT_RPAREN))
+                elif self.textoPlano[index] == '[':
+                    tokens.append(Token(TT_LBRACKET))
+                elif self.textoPlano[index] == ']':
+                    tokens.append(Token(TT_RBRACKET))
+                elif self.textoPlano[index] == '{':
+                    tokens.append(Token(TT_LBRACES))
+                elif self.textoPlano[index] == '}':
+                    tokens.append(Token(TT_RBRACES))
+                else:
+                    # Retorna error si no reconoce el caracter
+                    char = self.textoPlano[index]
+                    return [], IllegalCharError(f"'{char}'")
 
         # al final agrega el token de final
         tokens.append(Token(TT_EOF))
@@ -403,8 +480,9 @@ def run(textoPlano):
     # print()
     # print(textoPlano)
     lexer = Lexer(textoPlano)
-    tokens, error = lexer.crearTokens()
+    tokens, error = lexer.crearTokens2()
     print(f'\nTOKENS \n {tokens}\n')
+
     if error:
         return None, error
 

@@ -58,43 +58,21 @@ lista = getTest([Character('L'),
 '''
 
 # NUEVAS PRUEBAS PROYECTO 3
-'''
+
 assert getTest(['{', Character('L'), '|', Character('D'), '}']
                ) == ['LPAREN', 'LPAREN', {'L'}, 'OR', {'D'}, 'RPAREN', 'MUL', 'ALFA', 'RPAREN']
 
 
 assert getTest([Character('L'), '{', Character('L'), '|', Character('D'), '}']) == ['LPAREN', {
     'L'}, 'CONCAT', 'LPAREN', 'LPAREN', {'L'}, 'OR', {'D'}, 'RPAREN', 'MUL', 'ALFA', 'RPAREN', 'RPAREN']
+
+
+assert getTest([Character('"'), Character('S'), '{', Character('S'), '}', Character('"')]) == ['LPAREN', 'LPAREN', 'LPAREN', {
+    '"'}, 'CONCAT', {'S'}, 'RPAREN', 'CONCAT', 'LPAREN', {'S'}, 'MUL', 'ALFA', 'RPAREN', 'RPAREN', 'CONCAT', {'"'}, 'RPAREN']
+
 '''
 print(getTest([Character('"'), Character('S'),
                '{', Character('S'), '}', Character('"')]))
-
-'''
-assert getTest('2+5*3') == '(2+(5*3))', "debería crear paréntesis"
-assert getTest('2+2+2+2+2') == '((((2+2)+2)+2)+2)', "debería crear paréntesis"
-assert getTest(
-    '(1+2)/(1+2)') == '((1+2)/(1+2))', "solo crea paréntesis externos"
-
-assert getTest(
-    '123 123 123 +') == "Invalid Syntax: Expected '+', '-', '*' or '/'", "debería crear error de espera operador"
-
-assert getTest(
-    '1+') == 'Invalid Syntax: Expected int or float', "debería crear error de espera num"
-
 '''
 
 print("TODO BIEN!")
-
-
-'''
-while len(test) > 0:
-    text = test.pop()
-    print(text)
-    result, error = basic.run(text)
-
-    if error:
-        print(error.asString())
-    else:
-        print(result)
-    print()
-'''
