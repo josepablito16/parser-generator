@@ -91,7 +91,8 @@ def eliminarComentarios(lineas):
                 comentarioAbierto = True
             else:
                 if (len(linea[:linea.find('(.')]) > 0):
-                    listaSinComentarios.append(linea[:linea.find('(.')])
+                    listaSinComentarios.append(
+                        linea[:linea.find('(.')].strip())
         else:
             listaSinComentarios.append(linea)
 
@@ -310,25 +311,31 @@ def separarSets(sets, seccion):
 
     setsSeparados = []
     setTemportal = ""
-    for element in sets:
-        if (element[-1] == "."):
-            if (len(setTemportal) == 0):
-                setsSeparados.append(element)
+
+    print('-'*40)
+    print(sets)
+    print(eliminarComentarios(sets))
+    print('-'*40)
+    if (seccion != 'PRODUCTIONS'):
+        for element in eliminarComentarios(sets):
+            if (element[-1] == "."):
+                if (len(setTemportal) == 0):
+                    setsSeparados.append(element)
+
+                else:
+                    setsSeparados.append(setTemportal + element)
+                    setTemportal = ""
 
             else:
-                setsSeparados.append(setTemportal + element)
-                setTemportal = ""
+                setTemportal += element
 
-        else:
-            setTemportal += element
-    """
     print(f'''
         {seccion}
         seccionActualLista = {setsSeparados}
     ''')
-    """
 
     if (seccion == "CHARACTERS"):
+
         expresionesChar = procesarChar(setsSeparados)
         #print("char retorna")
         # print(expresionesChar)
@@ -386,7 +393,7 @@ if __name__ == "__main__":
     # Limpieza de archivo .atg
     listaLimpia = eliminarEspacios(openFile(nombreAtg))
 
-    listaLimpia = eliminarComentarios(listaLimpia)
+    #listaLimpia = eliminarComentarios(listaLimpia)
 
     # Identificacion de informacion
 

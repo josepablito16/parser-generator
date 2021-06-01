@@ -6,7 +6,7 @@ COMPILER Double
 
 CHARACTERS 
 
-digit = "0123456789" .
+digit = "0123456789" . (.hola.)
 
 
 KEYWORDS

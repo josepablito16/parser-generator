@@ -5,7 +5,7 @@ COMPILER Ejemplo
 
 (.Comentario en una linea.)
 
-CHARACTERS (.Comentario con codigo.)
+CHARACTERS
 
 letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".
 digit= "0123456789".
