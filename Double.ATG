@@ -1,0 +1,24 @@
+COMPILER Double    
+	
+(.
+			/*--------------Scanner Especification----------*/
+.)
+
+CHARACTERS 
+
+digit = "0123456789" .
+
+
+KEYWORDS
+
+while = "while".
+do = "do".
+
+TOKENS
+
+number = digit{digit}.
+decnumber = digit{digit}"."digit{digit}.
+
+
+
+END Double

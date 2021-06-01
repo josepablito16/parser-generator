@@ -1,4 +1,7 @@
-character = set(['1', '4', '5', '2', '3', ])
 
-ordenado = sorted(character)
-print(''.join(ordenado))
+cadena = 'digit{digit}"."digit{digit}.'
+
+for i in range(len(cadena) - 1, 0, -1):
+    if(cadena[i] == '.'):
+        print(i)
+        break

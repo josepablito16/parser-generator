@@ -125,8 +125,9 @@ def procesarChar(seccion):
     expresionesTratadas = {}
 
     for i in seccion:
+        # print(i)
         igual = i.find("=")
-        punto = i.find(".")
+        punto = getDotIndex(i)
 
         key = i[:igual].strip()
         item = i[igual + 1:punto].strip()
@@ -220,7 +221,7 @@ def procesarKeyWords(seccion):
     expresionesTratadas = {}
     for i in seccion:
         igual = i.find("=")
-        punto = i.find(".")
+        punto = getDotIndex(i)
 
         key = i[:igual].strip()
         item = i[igual + 2: punto - 1].strip()
@@ -246,6 +247,12 @@ def procesarKeyWords(seccion):
     return expresionesTratadas
 
 
+def getDotIndex(cadena):
+    for i in range(len(cadena) - 1, 0, -1):
+        if(cadena[i] == '.'):
+            return i
+
+
 def procesarTokens(seccion, chars, tokens):
     # print("TOKENSSSSSSSSSSSSSSSSSSSSSS")
     # print()
@@ -256,7 +263,7 @@ def procesarTokens(seccion, chars, tokens):
     expresionesTratadas = {}
     for i in seccion:
         igual = i.find("=")
-        punto = i.find(".")
+        punto = getDotIndex(i)
 
         key = i[:igual].strip()
         item = i[igual + 1: punto].strip()
@@ -399,13 +406,16 @@ if __name__ == "__main__":
         expresionesTokens[key] = [Token(TT_LPAREN)]+value+[Token(
             TT_CONCAT), Token(TT_HASHTAG, getHashTagId(key)), Token(TT_RPAREN)]
 
-    # print(expresionesTokens)
+    print("Expresiones Tokens")
+    print(expresionesTokens)
     expresionFinal = crearOrGeneral()
 
     print("ExpresionFinal")
+    '''
     for i in expresionFinal:
         print(f'{i} es variable: {type(i)}')
-    # print(expresionFinal)
+    '''
+    print(expresionFinal)
 
     # Algoritmo directo
     a = Arbol()
