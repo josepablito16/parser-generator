@@ -1,6 +1,7 @@
 from tokenObj import *
 from character import Character
 import Produccion as p
+import basic
 
 cadena = '(.double result1=0,result2=0;.)Term<ref result1>{ "+"Term<ref result2> (.result1+=result2;.)| "-"Term<ref result2> (.result1-=result2;.)} (.result=result1;.).'
 
@@ -142,4 +143,6 @@ while charActual != None:
 
 
 for i in token:
-    print(i)
+    print(f'{i} es tipo {type(i)}')
+
+basic.runProduccion(token)

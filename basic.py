@@ -239,6 +239,96 @@ class Lexer:
         tokens.append(Token(TT_EOF))
         return tokens, None
 
+    def crearTokensProduccion(self):
+        '''
+        Crea una lista de tokens
+        '''
+        tokens = []
+        if isinstance(self.textoPlano[0], Token):
+            if (self.textoPlano[0].tipo == TT_INT):
+                tokens.append(self.textoPlano[0])
+        elif self.textoPlano[0] == '|':
+            tokens.append(Token(TT_OR))
+        elif self.textoPlano[0] == '(':
+            tokens.append(Token(TT_LPAREN))
+        elif self.textoPlano[0] == ')':
+            tokens.append(Token(TT_RPAREN))
+        elif self.textoPlano[0] == '[':
+            tokens.append(Token(TT_LBRACKET))
+        elif self.textoPlano[0] == ']':
+            tokens.append(Token(TT_RBRACKET))
+        elif self.textoPlano[0] == '{':
+            tokens.append(Token(TT_LBRACES))
+        elif self.textoPlano[0] == '}':
+            tokens.append(Token(TT_RBRACES))
+
+        # Mientras no haya llegado al final
+        for index in range(1, len(self.textoPlano)):
+
+            # caso 1
+            # char . char
+            try:
+                if (self.textoPlano[index-1].tipo == self.textoPlano[index].tipo == TT_INT):
+                    tokens.append(Token(TT_CONCAT))
+                    tokens.append(self.textoPlano[index])
+                    continue
+            except:
+                pass
+
+            # caso 2
+            # char . open
+            try:
+                if (self.textoPlano[index-1].tipo == TT_INT and self.textoPlano[index] in openTokens):
+                    tokens.append(Token(TT_CONCAT))
+                    if self.textoPlano[index] == '(':
+                        tokens.append(Token(TT_LPAREN))
+                    elif self.textoPlano[index] == '[':
+                        tokens.append(Token(TT_LBRACKET))
+                    elif self.textoPlano[index] == '{':
+                        tokens.append(Token(TT_LBRACES))
+                    continue
+            except:
+                pass
+
+            # caso 3
+            # close . char
+            try:
+                if (self.textoPlano[index-1] in closeTokens and self.textoPlano[index].tipo == TT_INT):
+                    tokens.append(Token(TT_CONCAT))
+                    tokens.append(self.textoPlano[index])
+                    continue
+            except:
+                pass
+
+            try:
+                if self.textoPlano[index].tipo == TT_INT:
+                    tokens.append(self.textoPlano[index])
+                    continue
+            except:
+                pass
+            if self.textoPlano[index] == '|':
+                tokens.append(Token(TT_OR))
+            elif self.textoPlano[index] == '(':
+                tokens.append(Token(TT_LPAREN))
+            elif self.textoPlano[index] == ')':
+                tokens.append(Token(TT_RPAREN))
+            elif self.textoPlano[index] == '[':
+                tokens.append(Token(TT_LBRACKET))
+            elif self.textoPlano[index] == ']':
+                tokens.append(Token(TT_RBRACKET))
+            elif self.textoPlano[index] == '{':
+                tokens.append(Token(TT_LBRACES))
+            elif self.textoPlano[index] == '}':
+                tokens.append(Token(TT_RBRACES))
+            else:
+                # Retorna error si no reconoce el caracter
+                char = self.textoPlano[index]
+                return [], IllegalCharError(f"'{char}'")
+
+        # al final agrega el token de final
+        tokens.append(Token(TT_EOF))
+        return tokens, None
+
     def crearNumero(self):
         numContact = ''
         contadorPuntos = 0
@@ -580,4 +670,23 @@ def run(textoPlano):
     parser = Parser(tokens)
     ast = parser.parse()
     # print()
+    return getListNodes(ast), None
+
+
+def runProduccion(textoPlano):
+    '''
+    Metodo principal que llama al lexer y al parser
+    '''
+    # print()
+    # print(textoPlano)
+    lexer = Lexer(textoPlano)
+    tokens, error = lexer.crearTokensProduccion()
+    print(f'\nTOKENS \n {tokens}\n')
+
+    if error:
+        return None, error
+
+    parser = Parser(tokens)
+    ast = parser.parse()
+    print(f'\Tokens final \n {getListNodes(ast)}\n')
     return getListNodes(ast), None
