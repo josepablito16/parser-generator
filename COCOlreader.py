@@ -302,6 +302,19 @@ def separarSeccion(seccionActual, lista):
         pass
 
 
+def procesarProducciones(elementos):
+    for i in elementos:
+        igual = i.find("=")
+        punto = getDotIndex(i)
+
+        key = i[:igual].strip()
+        item = i[igual + 1: punto].strip()
+        print('-'*50)
+        print(key)
+        print(item)
+        print('-'*50)
+
+
 def separarSets(sets, seccion):
     '''
     Separa expresiones dentro de una seccion
@@ -329,24 +342,36 @@ def separarSets(sets, seccion):
             else:
                 setTemportal += element
 
-    print(f'''
-        {seccion}
-        seccionActualLista = {setsSeparados}
-    ''')
+        print(f'''
+            {seccion}
+            seccionActualLista = {setsSeparados}
+        ''')
+        if (seccion == "CHARACTERS"):
+            expresionesChar = procesarChar(setsSeparados)
+            #print("char retorna")
+            # print(expresionesChar)
 
-    if (seccion == "CHARACTERS"):
+        elif (seccion == "KEYWORDS"):
+            expresionesTokens = procesarKeyWords(setsSeparados)
 
-        expresionesChar = procesarChar(setsSeparados)
-        #print("char retorna")
-        # print(expresionesChar)
+        elif (seccion == "TOKENS"):
+            #print("en tokens entraaa")
+            # print(expresionesChar)
+            procesarTokens(setsSeparados, expresionesChar, expresionesTokens)
+    elif (seccion == 'PRODUCTIONS'):
+        print("Hay producciones")
+        for element in sets:
+            if (element[-1] == "."):
+                if (len(setTemportal) == 0):
+                    setsSeparados.append(element)
 
-    elif (seccion == "KEYWORDS"):
-        expresionesTokens = procesarKeyWords(setsSeparados)
+                else:
+                    setsSeparados.append(setTemportal + element)
+                    setTemportal = ""
 
-    elif (seccion == "TOKENS"):
-        #print("en tokens entraaa")
-        # print(expresionesChar)
-        procesarTokens(setsSeparados, expresionesChar, expresionesTokens)
+            else:
+                setTemportal += element
+        procesarProducciones(setsSeparados)
 
 
 def getHashTagId(nombre):
