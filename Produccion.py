@@ -6,7 +6,7 @@ class Produccion:
     - Arbol de parseo
     '''
 
-    def __init__(self, key, value):
+    def __init__(self, key, value=None):
         self.noTerminal = None
         self.atributo = None
         self.expresion = []
@@ -14,7 +14,7 @@ class Produccion:
         self.interpretarInformacion(key, value)
 
     def interpretarKey(self, key):
-        if (key.fin('<') != -1):
+        if (key.find('<') != -1):
             self.noTerminal = key[:key.find('<')].strip()
             self.atributo = key[key.find('<') + 1: key.find('>')].strip()
         else:
@@ -25,4 +25,8 @@ class Produccion:
 
     def interpretarInformacion(self, key, value):
         self.interpretarKey(key)
-        self.interpretarValue(value)
+        if (value != None):
+            self.interpretarValue(value)
+
+    def __repr__(self):
+        return f'no terminal = {self.noTerminal}; atributo = {self.atributo}'

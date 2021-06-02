@@ -1,3 +1,6 @@
+from tokenObj import *
+from character import Character
+import Produccion as p
 
 cadena = '(.double result1=0,result2=0;.)Term<ref result1>{ "+"Term<ref result2> (.result1+=result2;.)| "-"Term<ref result2> (.result1-=result2;.)} (.result=result1;.).'
 
@@ -5,6 +8,8 @@ reservados = ['|', '(', ')', '{', '}', '[', ']']
 textoPlano = cadena
 pos = -1
 charActual = None
+
+TT_INT = 'INT'
 
 
 def avanzar():
@@ -52,8 +57,10 @@ while charActual != None:
         if (len(subProduccion) > 0):
             # teniamos subproduccion anteriormente
             if subProduccion != " ":
-                token.append(subProduccion)
-            print(f'subProduccion = {subProduccion}')
+
+                token.append(
+                    Token(TT_INT, valor=p.Produccion(subProduccion), isSubProduccion=True))
+            #print(f'subProduccion = {subProduccion}')
             subProduccion = ""
 
         # inicia codigo target
@@ -65,8 +72,8 @@ while charActual != None:
 
     if (charActual == '.' and explorar() == ')'):
         # termina codigo target
-        token.append(codigoTarget)
-        print(f'codigoTarget = {codigoTarget}')
+        token.append(Token(TT_INT, valor=codigoTarget, isCodigoTarget=True))
+        #print(f'codigoTarget = {codigoTarget}')
         avanzar()
         avanzar()
         codigoTarget = ""
@@ -85,12 +92,13 @@ while charActual != None:
         if (len(subProduccion) > 0):
             # teniamos subproduccion anteriormente
             if subProduccion != " ":
-                token.append(subProduccion)
-            print(f'subProduccion = {subProduccion}')
+                token.append(
+                    Token(TT_INT, valor=p.Produccion(subProduccion), isSubProduccion=True))
+            #print(f'subProduccion = {subProduccion}')
             subProduccion = ""
 
         token.append(charActual)
-        print(f'charActual = {charActual}')
+        #print(f'charActual = {charActual}')
         avanzar()
         continue
 
@@ -101,8 +109,9 @@ while charActual != None:
         if (len(subProduccion) > 0):
             # teniamos subproduccion anteriormente
             if subProduccion != " ":
-                token.append(subProduccion)
-            print(f'subProduccion = {subProduccion}')
+                token.append(
+                    Token(TT_INT, valor=p.Produccion(subProduccion), isSubProduccion=True))
+            #print(f'subProduccion = {subProduccion}')
             subProduccion = ""
         if (len(tokenAnonimo) == 0):
             # es el inicio
@@ -112,8 +121,9 @@ while charActual != None:
             continue
         else:
             # es el final
-            token.append(tokenAnonimo)
-            print(f'tokenAnonimo = {tokenAnonimo}')
+            token.append(Token(TT_INT, Character(
+                tokenAnonimo), isTokenAnonimo=True))
+            #print(f'tokenAnonimo = {tokenAnonimo}')
             tokenAnonimo = ""
             avanzar()
             continue
@@ -131,7 +141,5 @@ while charActual != None:
     continue
 
 
-# creacion de tokens
-
-
-print(token)
+for i in token:
+    print(i)
