@@ -689,4 +689,4 @@ def runProduccion(textoPlano):
     parser = Parser(tokens)
     ast = parser.parse()
     print(f'\Tokens final \n {getListNodes(ast)}\n')
-    return getListNodes(ast), None
+    return getListNodes(ast)
