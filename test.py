@@ -239,9 +239,6 @@ def calcularFirstLastPosStar(nodo):
     nodo.addFirstPos(
         nodo.getLeft().getFirstPos()
     )
-    nodo.addLastPos(
-        nodo.getLeft().getLastPos()
-    )
 
 
 def calcularPrimeraPos(Node):
@@ -290,4 +287,5 @@ def calcularPrimeraPos(Node):
 
 print("Calcular primera")
 calcularPrimeraPos(arbol)
-print(arbol.firstPos)
+print('importante')
+print(arbol.getLeft().getRight().getFirstPos())
