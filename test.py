@@ -159,8 +159,8 @@ for i in token:
 
 produccionFinal = basic.runProduccion(token)
 
-print('Produccion final')
-print(produccionFinal)
+#print('Produccion final')
+# print(produccionFinal)
 
 a = Arbol()
 arbol = a.armarArbolProduccion(produccionFinal)
@@ -192,6 +192,9 @@ def calcularFirstLastPosOr(nodo):
 
 
 def calcularNullableHoja(nodo):
+    print('Nullable')
+    print(nodo.getValue())
+    print(type(nodo.getValue().tipo))
     if (isinstance(nodo.getValue(), Token)):
         if(nodo.getValue().tipo == TT_EPSILON):
             nodo.setNullable(True)
@@ -200,9 +203,12 @@ def calcularNullableHoja(nodo):
 
 
 def calcularFirstLastPosHoja(nodo):
+    print('First Pos')
+    print(nodo.getValue())
     if (isinstance(nodo.getValue(), Token)):
-        if (isinstance(nodo.getValue(), Character)):
-            nodo.addFirstPos(list(nodo.getValue().elementos)[0])
+        if (isinstance(nodo.getValue().valor, Character)):
+            print(f'first pos = {list(nodo.getValue().valor.elementos)[0]}')
+            nodo.addFirstPos(list(nodo.getValue().valor.elementos)[0])
 
 
 def calcularNullableConcat(nodo):
@@ -252,34 +258,36 @@ def calcularPrimeraPos(Node):
     # print()
     # print(Node.getValue())
     # print(type(Node.getValue()))
-    print(f'{Node.getValue()} tipo {type(Node.getValue())}')
+    #print(f'{Node.getValue()} tipo {type(Node.getValue())}')
     if(Node.getValue().tipo in operadores):
         # Operadores
         if(Node.getValue().tipo == TT_OR):
-            # print("OR")
+            print("\nOR")
             calcularNullableOr(Node)
             calcularFirstLastPosOr(Node)
 
         if(Node.getValue().tipo == TT_MUL):
-            # print("MUL")
+            print("\nMUL")
             calcularNullableStar(Node)
             calcularFirstLastPosStar(Node)
 
         if(Node.getValue().tipo == TT_CONCAT):
-            # print("CONCAT")
+            print("\nCONCAT")
             calcularNullableConcat(Node)
             calcularFirstLastPosConcat(Node)
 
     else:
         if (Node.getValue().tipo == TT_INT):
-            # print("NUM")
+            print("\nNUM1")
             calcularFirstLastPosHoja(Node)
             calcularNullableHoja(Node)
 
         elif (Node.getValue().tipo in numeros):
-            # print("NUM")
+            print("\nNUM2 ")
             calcularFirstLastPosHoja(Node)
             calcularNullableHoja(Node)
 
 
+print("Calcular primera")
 calcularPrimeraPos(arbol)
+print(arbol.firstPos)
