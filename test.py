@@ -285,7 +285,51 @@ def calcularPrimeraPos(Node):
             calcularNullableHoja(Node)
 
 
+def preOrden(Node):
+    '''
+    Recorre el arbol postOrden para calcular
+    nullable, firstpos y lastPos
+    '''
+    if(Node == None):
+        return
+
+    # print()
+    # print(Node.getValue())
+    # print(type(Node.getValue()))
+    #print(f'{Node.getValue()} tipo {type(Node.getValue())}')
+    if(Node.getValue().tipo in operadores):
+        # Operadores
+        if(Node.getValue().tipo == TT_OR):
+            print("\nOR")
+            # calcularNullableOr(Node)
+            # calcularFirstLastPosOr(Node)
+
+        if(Node.getValue().tipo == TT_MUL):
+            print("\nMUL")
+            # calcularNullableStar(Node)
+            # calcularFirstLastPosStar(Node)
+
+        if(Node.getValue().tipo == TT_CONCAT):
+            print("\nCONCAT")
+            # calcularNullableConcat(Node)
+            # calcularFirstLastPosConcat(Node)
+
+    else:
+        if (Node.getValue().tipo == TT_INT):
+            print("\nNUM1")
+            # calcularFirstLastPosHoja(Node)
+            # calcularNullableHoja(Node)
+
+        elif (Node.getValue().tipo in numeros):
+            print("\nNUM2 ")
+            # calcularFirstLastPosHoja(Node)
+            # calcularNullableHoja(Node)
+
+    preOrden(Node.getLeft())
+    preOrden(Node.getRight())
+
+
 print("Calcular primera")
 calcularPrimeraPos(arbol)
-print('importante')
-print(arbol.getLeft().getRight().getFirstPos())
+print('\nGeneracion de codigo')
+preOrden(arbol)
