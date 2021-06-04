@@ -14,6 +14,15 @@ class Token:
     def getId(self):
         return f"{self.tipo}{self.valor}"
 
+    def getInfo(self):
+        print(f'''
+            tipo = {self.tipo}
+            valor = {self.valor}
+            isTokenAnonimo = {self.isTokenAnonimo}
+            isSubProduccion = {self.isSubProduccion}
+            isCodigoTarget = {self.isCodigoTarget}
+        ''')
+
     def __repr__(self):
         if self.valor:
             return f'{self.tipo}:{self.valor}'
