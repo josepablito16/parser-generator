@@ -1,0 +1,21 @@
+codigo inicial
+esto ya deberia de estar
+
+
+def Expression(parametros):
+
+
+	double result1=0,result2=0;
+	Term(ref result1)
+	while (['+', '-']):
+		if (['+']):
+
+			expect(<Character> +)
+			Term(ref result2)
+			result1+=result2;
+		if (['-']):
+
+			expect(<Character> -)
+			Term(ref result2)
+			result1-=result2;
+	result=result1;

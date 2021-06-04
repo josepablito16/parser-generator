@@ -4,7 +4,7 @@ import Produccion as p
 import basic
 from Arbol import *
 # --------------------
-contadorTab = 0
+contadorTab = 1
 codigoGenerado = ""
 ifAbierto = False
 
@@ -98,6 +98,7 @@ def generarCodigo(Node):
                 # Es subexpresion
                 tabs = "\t" * contadorTab
                 codigoGenerado += f"{tabs}{Node.getValue().valor.noTerminal}({Node.getValue().valor.atributo})\n"
+
             elif (Node.getValue().isTokenAnonimo):
                 tabs = "\t" * contadorTab
                 codigoGenerado += f"{tabs}expect({Node.getValue().valor})\n"
@@ -107,7 +108,7 @@ def generarCodigo(Node):
             print(Node.getValue().getInfo())
             if (Node.getValue().tipo == TT_ALFA):
                 # Caso fin While
-                contadorTab -= 1
+                contadorTab -= 2
 
     generarCodigo(Node.getLeft())
     generarCodigo(Node.getRight())
@@ -360,7 +361,7 @@ def calcularPrimeraPos(Node):
             calcularNullableHoja(Node)
 
 
-def procesarProduccion(produccionPlana):
+def procesarProduccion(produccionPlana, filename):
     global textoPlano
     textoPlano = produccionPlana
 
@@ -378,7 +379,11 @@ def procesarProduccion(produccionPlana):
     print('\nGeneracion de codigo')
     generarCodigo(arbol)
 
+    global codigoGenerado
+    f = open(filename, "a+")
+    f.write(codigoGenerado)
+
 
 if __name__ == "__main__":
     cadena = '(.double result1=0,result2=0;.)Term<ref result1>{ "+"Term<ref result2> (.result1+=result2;.)| "-"Term<ref result2> (.result1-=result2;.)} (.result=result1;.).'
-    procesarProduccion(cadena)
+    procesarProduccion(cadena, "codigoGenerado.txt")
