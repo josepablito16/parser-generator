@@ -52,6 +52,6 @@ Factor<result> =		(.sign = 1.)
 
 Number<result> =	
 	(number				
-	|decnumber)       (.result = float(self.prev_token.value).)
+	|decnumber)       (.result = float(tokens[0]['valor']).)
 	.
 END Double

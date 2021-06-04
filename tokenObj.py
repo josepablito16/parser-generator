@@ -4,12 +4,13 @@ class Token:
     Objeto que guarda el tipo y valor de cada token
     '''
 
-    def __init__(self, tipo, valor=None, isTokenAnonimo=None, isSubProduccion=None, isCodigoTarget=None):
+    def __init__(self, tipo, valor=None, isTokenAnonimo=None, isSubProduccion=None, isCodigoTarget=None, isToken=None):
         self.tipo = tipo
         self.valor = valor
         self.isTokenAnonimo = isTokenAnonimo
         self.isSubProduccion = isSubProduccion
         self.isCodigoTarget = isCodigoTarget
+        self.isToken = isToken
 
     def getId(self):
         return f"{self.tipo}{self.valor}"

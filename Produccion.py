@@ -26,9 +26,9 @@ class Produccion:
     def interpretarValue(self, value, filename):
         f = open(filename, "a+")
         if (self.atributo != None):
-            f.write(f"def {self.noTerminal}({self.atributo}): \n")
+            f.write(f"\ndef {self.noTerminal}({self.atributo}): \n")
         else:
-            f.write(f"def {self.noTerminal}(): \n")
+            f.write(f"\ndef {self.noTerminal}(): \n")
         f.close()
         gc.procesarProduccion(value, filename)
         # print(value)

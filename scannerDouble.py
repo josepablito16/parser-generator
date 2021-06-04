@@ -4,6 +4,7 @@
 import pickle
 import copy
 import sys
+from tokenObj import Token
 
 
 class NodoDirecto(object):
@@ -173,11 +174,15 @@ def simularDirecto(DFA, cadena, diccionarioTokens):
     """
 
     s = getEstadosIniciales(DFA)[0]
+    sTemp = []
 
     for i in cadena:
 
         if (s == []):
+            s = sTemp
+            cadena = cadena[:cadena.find(i)-1]
             break
+        sTemp = s
         s = mover(DFA[s], i)
 
     # Si la interseccion de S y los estados finales no es vacia
@@ -185,9 +190,9 @@ def simularDirecto(DFA, cadena, diccionarioTokens):
     if (list(set.intersection(set(s), set(getEstadosFinales(DFA)))) != []):
         token = getNombreToken(DFA[s].estados, diccionarioTokens,
                                estadosHash, nodosHoja)
-        return f"Cadena: {cadena} es token: {token}"
+        return {"tipo": token, "valor": cadena}
     else:
-        return f"Cadena: {cadena} no identificado"
+        return {"tipo": cadena, "valor": cadena}
 
 
 try:
@@ -199,6 +204,7 @@ try:
 except:
     print("No fue posible abrir los archivos auxiliares del scanner")
 
+tokens = []
 if (len(sys.argv) == 2):
     # si tenemos el argumento del nombre del .txt
     try:
@@ -206,7 +212,10 @@ if (len(sys.argv) == 2):
             lines = f.readlines()
 
             for linea in lines:
-                print(simularDirecto(DFA_directo, linea.strip(), diccionarioTokens))
+                tokens.append(simularDirecto(
+                    DFA_directo, linea.strip(), diccionarioTokens))
+
+        print(tokens)
     except:
         print("No fue posible abrir el archivo")
 

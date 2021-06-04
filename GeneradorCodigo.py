@@ -56,7 +56,7 @@ def generarCodigo(Node):
             print("\nMUL")
             print(Node.getValue().getInfo())
             tabs = "\t" * contadorTab
-            codigoGenerado += f"{tabs}while ({Node.firstPos}):\n"
+            codigoGenerado += f"{tabs}while (tokens[0]['tipo'] in {Node.firstPos}):\n"
             contadorTab += 1
 
         if(Node.getValue().tipo == TT_CONCAT):
@@ -79,7 +79,7 @@ def generarCodigo(Node):
                     ifAbierto = True
 
                 tabs = "\t" * contadorTab
-                codigoGenerado += f"{tabs}if ({Node.firstPos}):\n"
+                codigoGenerado += f"{tabs}if (tokens[0]['tipo'] in {Node.firstPos}):\n"
                 contadorTab += 1
             else:
                 codigoGenerado += "\n"
@@ -105,7 +105,7 @@ def generarCodigo(Node):
 
             elif (Node.getValue().isTokenAnonimo):
                 tabs = "\t" * contadorTab
-                codigoGenerado += f'{tabs}expect({list(Node.getValue().valor.elementos)})\n'
+                codigoGenerado += f'{tabs}Expect({list(Node.getValue().valor.elementos)})\n'
 
         elif (Node.getValue().tipo in numeros):
             print("\nNUM2 ")
@@ -399,6 +399,7 @@ def procesarProduccion(produccionPlana, filename):
 
     f = open(filename, "a+")
     f.write(codigoGenerado)
+    f.close()
 
 
 if __name__ == "__main__":
