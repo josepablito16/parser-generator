@@ -21,7 +21,7 @@ decnumber = digit{digit}"."digit{digit}.
 
 PRODUCTIONS
 
-Expr = {Stat ";"{white}}{white}".".
+Expr = Stat ";".
 
 Stat = 							  (.value = 0.)
 	Expression<value>		(.print(f"Resultado: {value}").)

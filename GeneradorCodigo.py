@@ -97,11 +97,15 @@ def generarCodigo(Node):
             elif (Node.getValue().isSubProduccion):
                 # Es subexpresion
                 tabs = "\t" * contadorTab
-                codigoGenerado += f"{tabs}{Node.getValue().valor.noTerminal}({Node.getValue().valor.atributo})\n"
+                atributo = Node.getValue().valor.atributo
+                if (atributo != None):
+                    codigoGenerado += f"{tabs}{Node.getValue().valor.noTerminal}({atributo})\n"
+                else:
+                    codigoGenerado += f"{tabs}{Node.getValue().valor.noTerminal}()\n"
 
             elif (Node.getValue().isTokenAnonimo):
                 tabs = "\t" * contadorTab
-                codigoGenerado += f"{tabs}expect({Node.getValue().valor})\n"
+                codigoGenerado += f'{tabs}expect({list(Node.getValue().valor.elementos)})\n'
 
         elif (Node.getValue().tipo in numeros):
             print("\nNUM2 ")
@@ -363,6 +367,20 @@ def calcularPrimeraPos(Node):
 
 def procesarProduccion(produccionPlana, filename):
     global textoPlano
+    global contadorTab
+    global ifAbierto
+    global pos
+    global charActual
+    global token
+    global codigoGenerado
+
+    contadorTab = 1
+    codigoGenerado = ""
+    ifAbierto = False
+    textoPlano = ""
+    pos = -1
+    charActual = None
+    token = []
     textoPlano = produccionPlana
 
     identificarTokens()
@@ -379,11 +397,10 @@ def procesarProduccion(produccionPlana, filename):
     print('\nGeneracion de codigo')
     generarCodigo(arbol)
 
-    global codigoGenerado
     f = open(filename, "a+")
     f.write(codigoGenerado)
 
 
 if __name__ == "__main__":
     cadena = '(.double result1=0,result2=0;.)Term<ref result1>{ "+"Term<ref result2> (.result1+=result2;.)| "-"Term<ref result2> (.result1-=result2;.)} (.result=result1;.).'
-    procesarProduccion(cadena, "codigoGenerado.txt")
+    procesarProduccion(cadena, "codigoGenerado.py")

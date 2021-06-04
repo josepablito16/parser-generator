@@ -11,6 +11,8 @@ import Directo as d
 
 import pickle
 
+# --------
+import Produccion as p
 
 secciones = ['CHARACTERS', 'KEYWORDS', 'TOKENS', 'PRODUCTIONS']
 seccionesConsumidas = []
@@ -312,6 +314,7 @@ def procesarProducciones(elementos):
         print('-'*50)
         print(key)
         print(item)
+        p.Produccion(key, item, "codigoGenerado.py")
         print('-'*50)
 
 
