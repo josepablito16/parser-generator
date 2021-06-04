@@ -117,8 +117,6 @@ def identificarSeccion(linea):
     if linea.strip()[0:3] == "END":
         return "END"
 
-    print("ERROR")
-
 
 def procesarChar(seccion):
     # print("CHAAAAAR")
@@ -311,11 +309,11 @@ def procesarProducciones(elementos):
 
         key = i[:igual].strip()
         item = i[igual + 1: punto].strip()
-        print('-'*50)
-        print(key)
-        print(item)
+        # print('-'*50)
+        # print(key)
+        # print(item)
         p.Produccion(key, item, f"parser{nombreCompiler}.py")
-        print('-'*50)
+        # print('-'*50)
 
 
 def separarSets(sets, seccion):
@@ -328,10 +326,10 @@ def separarSets(sets, seccion):
     setsSeparados = []
     setTemportal = ""
 
-    print('-'*40)
-    print(sets)
-    print(eliminarComentarios(sets))
-    print('-'*40)
+    # print('-'*40)
+    # print(sets)
+    # print(eliminarComentarios(sets))
+    # print('-'*40)
     if (seccion != 'PRODUCTIONS'):
         for element in eliminarComentarios(sets):
             if (element[-1] == "."):
@@ -345,10 +343,6 @@ def separarSets(sets, seccion):
             else:
                 setTemportal += element
 
-        print(f'''
-            {seccion}
-            seccionActualLista = {setsSeparados}
-        ''')
         if (seccion == "CHARACTERS"):
             expresionesChar = procesarChar(setsSeparados)
             #print("char retorna")
@@ -362,7 +356,7 @@ def separarSets(sets, seccion):
             # print(expresionesChar)
             procesarTokens(setsSeparados, expresionesChar, expresionesTokens)
     elif (seccion == 'PRODUCTIONS'):
-        print("Hay producciones")
+        #print("Hay producciones")
         for element in sets:
             if (element[-1] == "."):
                 if (len(setTemportal) == 0):
@@ -460,16 +454,16 @@ if __name__ == "__main__":
         expresionesTokens[key] = [Token(TT_LPAREN)]+value+[Token(
             TT_CONCAT), Token(TT_HASHTAG, getHashTagId(key)), Token(TT_RPAREN)]
 
-    print("Expresiones Tokens")
-    print(expresionesTokens)
+    #print("Expresiones Tokens")
+    # print(expresionesTokens)
     expresionFinal = crearOrGeneral()
 
-    print("ExpresionFinal")
+    # print("ExpresionFinal")
     '''
     for i in expresionFinal:
         print(f'{i} es variable: {type(i)}')
     '''
-    print(expresionFinal)
+    # print(expresionFinal)
 
     # Algoritmo directo
     a = Arbol()
@@ -720,3 +714,4 @@ else:
 
     f.close()
     print(f"scanner{nombreCompiler}.py generado correctamente!")
+    print(f"parser{nombreCompiler}.py generado correctamente!")

@@ -48,26 +48,27 @@ def generarCodigo(Node):
     if(Node.getValue().tipo in operadores):
         # Operadores
         if(Node.getValue().tipo == TT_OR):
-            print("\nOR")
-            print(Node.getValue().getInfo())
+            # print("\nOR")
+            # print(Node.getValue().getInfo())
+            pass
 
         if(Node.getValue().tipo == TT_MUL):
             # Caso while
-            print("\nMUL")
-            print(Node.getValue().getInfo())
+            # print("\nMUL")
+            # print(Node.getValue().getInfo())
             tabs = "\t" * contadorTab
             codigoGenerado += f"{tabs}while (tokens[0]['tipo'] in {Node.firstPos}):\n"
             contadorTab += 1
 
         if(Node.getValue().tipo == TT_CONCAT):
             # Caso concat
-            print("\nCONCAT")
-            print(Node.getValue().getInfo())
+            # print("\nCONCAT")
+            # print(Node.getValue().getInfo())
 
             # Revisa si el padre del nodo es un Or
             try:
                 isPadreOr = Node.getRoot().getValue().tipo == TT_OR
-                print("CONCAT con padre OR")
+                #print("CONCAT con padre OR")
             except:
                 isPadreOr = False
 
@@ -86,8 +87,8 @@ def generarCodigo(Node):
 
     else:
         if (Node.getValue().tipo == TT_INT):
-            print("\nNUM1")
-            print(Node.getValue().getInfo())
+            # print("\nNUM1")
+            # print(Node.getValue().getInfo())
 
             if (Node.getValue().isCodigoTarget):
                 # Es codigo target
@@ -108,16 +109,16 @@ def generarCodigo(Node):
                 codigoGenerado += f'{tabs}Expect({list(Node.getValue().valor.elementos)})\n'
 
         elif (Node.getValue().tipo in numeros):
-            print("\nNUM2 ")
-            print(Node.getValue().getInfo())
+            #print("\nNUM2 ")
+            # print(Node.getValue().getInfo())
             if (Node.getValue().tipo == TT_ALFA):
                 # Caso fin While
                 contadorTab -= 2
 
     generarCodigo(Node.getLeft())
     generarCodigo(Node.getRight())
-    print("-"*50)
-    print(codigoGenerado)
+    # print("-"*50)
+    # print(codigoGenerado)
 
 
 def avanzar():
@@ -272,9 +273,9 @@ def calcularFirstLastPosOr(nodo):
 
 
 def calcularNullableHoja(nodo):
-    print('Nullable')
-    print(nodo.getValue())
-    print(type(nodo.getValue().tipo))
+    # print('Nullable')
+    # print(nodo.getValue())
+    # print(type(nodo.getValue().tipo))
     if (isinstance(nodo.getValue(), Token)):
         if(nodo.getValue().tipo == TT_EPSILON):
             nodo.setNullable(True)
@@ -283,11 +284,11 @@ def calcularNullableHoja(nodo):
 
 
 def calcularFirstLastPosHoja(nodo):
-    print('First Pos')
-    print(nodo.getValue())
+    #print('First Pos')
+    # print(nodo.getValue())
     if (isinstance(nodo.getValue(), Token)):
         if (isinstance(nodo.getValue().valor, Character)):
-            print(f'first pos = {list(nodo.getValue().valor.elementos)[0]}')
+            #print(f'first pos = {list(nodo.getValue().valor.elementos)[0]}')
             nodo.addFirstPos(list(nodo.getValue().valor.elementos)[0])
 
 
@@ -339,28 +340,28 @@ def calcularPrimeraPos(Node):
     if(Node.getValue().tipo in operadores):
         # Operadores
         if(Node.getValue().tipo == TT_OR):
-            print("\nOR")
+            # print("\nOR")
             calcularNullableOr(Node)
             calcularFirstLastPosOr(Node)
 
         if(Node.getValue().tipo == TT_MUL):
-            print("\nMUL")
+            # print("\nMUL")
             calcularNullableStar(Node)
             calcularFirstLastPosStar(Node)
 
         if(Node.getValue().tipo == TT_CONCAT):
-            print("\nCONCAT")
+            # print("\nCONCAT")
             calcularNullableConcat(Node)
             calcularFirstLastPosConcat(Node)
 
     else:
         if (Node.getValue().tipo == TT_INT):
-            print("\nNUM1")
+            # print("\nNUM1")
             calcularFirstLastPosHoja(Node)
             calcularNullableHoja(Node)
 
         elif (Node.getValue().tipo in numeros):
-            print("\nNUM2 ")
+            #print("\nNUM2 ")
             calcularFirstLastPosHoja(Node)
             calcularNullableHoja(Node)
 
@@ -384,17 +385,19 @@ def procesarProduccion(produccionPlana, filename):
     textoPlano = produccionPlana
 
     identificarTokens()
+    '''
     for i in token:
         print(f'{i} es tipo {type(i)}')
+    '''
 
     produccionFinal = basic.runProduccion(token)
 
     a = Arbol()
     arbol = a.armarArbolProduccion(produccionFinal)
 
-    print("Calcular primera")
+    #print("Calcular primera")
     calcularPrimeraPos(arbol)
-    print('\nGeneracion de codigo')
+    #print('\nGeneracion de codigo')
     generarCodigo(arbol)
 
     f = open(filename, "a+")

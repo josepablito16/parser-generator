@@ -681,12 +681,12 @@ def runProduccion(textoPlano):
     # print(textoPlano)
     lexer = Lexer(textoPlano)
     tokens, error = lexer.crearTokensProduccion()
-    print(f'\nTOKENS \n {tokens}\n')
+    #print(f'\nTOKENS \n {tokens}\n')
 
     if error:
         return None, error
 
     parser = Parser(tokens)
     ast = parser.parse()
-    print(f'\Tokens final \n {getListNodes(ast)}\n')
+    #print(f'\Tokens final \n {getListNodes(ast)}\n')
     return getListNodes(ast)

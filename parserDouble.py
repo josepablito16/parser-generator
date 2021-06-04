@@ -52,7 +52,7 @@ def Term(result):
 
 	result1 = result2 = 0
 	Factor(result1)
-	while (tokens[0]['tipo'] in ['*', '/']):
+	while (tokens[0]['tipo'] in ['/', '*']):
 		if (tokens[0]['tipo'] in ['*']):
 
 			Expect(['*'])

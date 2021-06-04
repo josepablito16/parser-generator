@@ -76,11 +76,11 @@ class Arbol(object):
                 self.pila.pop()
 
                 # print(f"({N2}|{N1})")
-                print('-'*50)
-                print(f'{N2} tipo {type(N2)}')
-                print('OR')
-                print(f'{N1} tipo {type(N1)}')
-                print('-'*50)
+                # print('-'*50)
+                #print(f'{N2} tipo {type(N2)}')
+                # print('OR')
+                #print(f'{N1} tipo {type(N1)}')
+                # print('-'*50)
 
                 self.pila.append(f"({N2}|{N1})")
 
@@ -92,11 +92,11 @@ class Arbol(object):
                 self.pila.pop()
 
                 # print(f"({N2}*{N1})")
-                print('-'*50)
-                print(f'{N2} tipo {type(N2)}')
-                print('*')
-                print(f'{N1} tipo {type(N1)}')
-                print('-'*50)
+                # print('-'*50)
+                #print(f'{N2} tipo {type(N2)}')
+                # print('*')
+                #print(f'{N1} tipo {type(N1)}')
+                # print('-'*50)
 
                 self.pila.append(f"({N2}*{N1})")
 
@@ -108,11 +108,11 @@ class Arbol(object):
                 self.pila.pop()
 
                 # print(f"({N2}.{N1})")
-                print('-'*50)
-                print(f'{N2} tipo {type(N2)}')
-                print('CONCAT')
-                print(f'{N1} tipo {type(N1)}')
-                print('-'*50)
+                # print('-'*50)
+                #print(f'{N2} tipo {type(N2)}')
+                # print('CONCAT')
+                #print(f'{N1} tipo {type(N1)}')
+                # print('-'*50)
                 self.pila.append(f"({N2}.{N1})")
 
         else:
@@ -206,33 +206,33 @@ class Arbol(object):
         root = Node(None)
         actual = root
 
-        print('Se arma el arbol')
+        #print('Se arma el arbol')
         for i in entrada:
 
             if (isinstance(i, Token)):
                 # es parentesis, operador Alfa o Beta
 
                 if(i.tipo == TT_LPAREN):
-                    print('Se crea nodo izquiedo')
-                    print('Se mueve al nodo izquierdo')
+                    #print('Se crea nodo izquiedo')
+                    #print('Se mueve al nodo izquierdo')
                     actual.setLeft(None, actual)
                     actual = actual.getLeft()
 
                 if(i.tipo in self.operadores):
-                    print(f'Se pone el valor al nodo: {i}')
-                    print('Se crea nodo derecho')
-                    print('Se mueve al nodo derecho')
+                    #print(f'Se pone el valor al nodo: {i}')
+                    #print('Se crea nodo derecho')
+                    #print('Se mueve al nodo derecho')
                     actual.setValue(i)
                     actual.setRight(None, actual)
                     actual = actual.getRight()
 
                 if(i.tipo == TT_RPAREN):
-                    print('Se mueve a la raiz del nodo')
+                    #print('Se mueve a la raiz del nodo')
                     actual = actual.getRoot()
 
                 if(i.tipo in self.numeros):
-                    print(f'Se pone el valor al nodo: {i}')
-                    print('Se mueve a la raiz del nodo')
+                    #print(f'Se pone el valor al nodo: {i}')
+                    #print('Se mueve a la raiz del nodo')
                     # Token <'ALFA'> o <'EPSILON'> o <'HASHTAG'>
                     actual.setValue(i)
                     actual = actual.getRoot()
@@ -240,16 +240,16 @@ class Arbol(object):
                 if(i.tipo == TT_INT):
                     # Sabemos que es <Char>
 
-                    print(f'Se pone el valor al nodo: {i}')
-                    print('Se mueve a la raiz del nodo')
+                    #print(f'Se pone el valor al nodo: {i}')
+                    #print('Se mueve a la raiz del nodo')
                     actual.setValue(i)  # <Character>
                     actual = actual.getRoot()
 
             elif (isinstance(i, basic.NodoNumero)):
                 # Sabemos que es <Char>
 
-                print(f'Se pone el valor al nodo: {i}')
-                print('Se mueve a la raiz del nodo')
+                #print(f'Se pone el valor al nodo: {i}')
+                #print('Se mueve a la raiz del nodo')
                 actual.setValue(i.token.valor)  # <Character>
                 actual = actual.getRoot()
 
